@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\ContatoController;
+use App\Http\Controllers\FornecedorController;
 use App\Http\Controllers\PrincipalController;
 use App\Http\Controllers\SobreController;
+use App\Http\Controllers\TesteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,28 +23,17 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PrincipalController::class, 'principal'])->name('site.index');
 Route::get('/sobre', [SobreController::class, 'sobre'])->name('site.sobre');
 Route::get('/contato', [ContatoController::class, 'contato'])->name('site.contato');
+Route::post('/contato', [ContatoController::class, 'contato'])->name('site.contato');
 Route::get('/login', function(){return "Login";})->name('site.login');
 
 //Agrupando rotas por um prefixo
 Route::prefix('/app')->group(function(){
     Route::get('/clientes', function(){return "Clientes";})->name('app.clientes');
-    Route::get('/fornecedores', function(){return "Fornecedores";})->name('app.fornecedores');
+    Route::get('/fornecedores', [FornecedorController::class,'index'])->name('app.fornecedores');
     Route::get('/produtos', function(){return "Produtos";})->name('app.produtos');
 });
 
-//Exercitando o redirecionamento de rotas
-Route::get('rota1', function(){
-    //return "Você está na rota 1";
-    //Redirecionar dentro do contexto da função de callback
-    return redirect()->route('site.rota2');
-})->name('site.rota1');
-
-Route::get('rota2', function(){
-    return "Você está na rota 2";
-})->name('site.rota2');
-
-//Forma 1 de redirecionamento, onde passamos a rota de origem e a rota de destino
-#Route::redirect('rota1', 'rota2');
+Route::get('/teste/{p1}/{p2}', [TesteController::class, 'teste'])->name('teste');
 
 
 //Gerando rota de fallback, ou seja, quando a página não é encontrada
